@@ -7,17 +7,16 @@ import Translate.Traduce
 object ParseProgram extends Rules{
 
   def main(args:Array[String]): Unit = {
-
-    //Inserire il traduttore.
-
   }
 
 
   def parse(input :String): ParseProgram.ParseResult[Any] ={
-    println("input:"+input)
-    println(parseAll(program,input))
+    var translate=new Traduce()
+    var stringa=translate.onTranslate2(parseAll(program,input).toString)
+    println(stringa)
     return parseAll(program,input)
     //gui.printGUI(parseAll(program,args(0)).toString)
+
 
   }
 
