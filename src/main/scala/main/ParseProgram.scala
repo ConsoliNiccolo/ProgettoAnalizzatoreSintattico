@@ -10,11 +10,12 @@ object ParseProgram extends Rules{
   }
 
 
-  def parse(input :String): ParseProgram.ParseResult[Any] ={
+  def parse(input :String): String ={
     var translate=new Traduce()
-    var stringa=translate.onTranslate2(parseAll(program,input).toString)
-    println(stringa)
-    return parseAll(program,input)
+   // var stringa=translate.onTranslate2(parseAll(program,input).toString)
+   // println(stringa)
+    var res=translate.Trasl(parseAll(program,input).toString)
+    return res
     //gui.printGUI(parseAll(program,args(0)).toString)
 
 
