@@ -104,9 +104,9 @@ class Traduce extends App {
                                    }
 
                                   }
-
-
+        if(x.contains("None~;")) {risultato=risultato+"&>;<<"}
       }
+
     return risultato
   }
 }
