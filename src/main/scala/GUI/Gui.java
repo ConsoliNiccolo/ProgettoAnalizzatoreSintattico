@@ -14,6 +14,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.ParseProgram;
 
+import java.util.Arrays;
+
 
 public class Gui extends Application {
 
@@ -59,7 +61,7 @@ public class Gui extends Application {
             StackPane layout5=drawTree(result);
 
             layout5.getChildren().add(button2);
-            Scene scene3 = new Scene(layout5,500,400);
+            Scene scene3 = new Scene(layout5,650,400);
             window.setScene(scene3);
         });
 
@@ -78,21 +80,23 @@ public class Gui extends Application {
 
         TreeItem<String> rootItem = new TreeItem<> ("Program");
         rootItem.setExpanded(true);
+
+
         {
+
+
          //   String s[]=input.split("!"); //s[0] = "!" Crea il nodo root
-            String s1[]= input.split("$");   //s1[0] = "$" Crea s1.length nodi dichiarazioni
-            String s2[]= s1[1].split("&");   // s2[0] = dichiarazioni s2[1] = simp  Crea s2.length nodi stmt
+            String s1[]= input.split("[\"~\"][\"L\"][\"i\"][\"s\"][\"t\"]");   //s1[0] = "$" Crea s1.length nodi dichiarazioni
+         //   String s2[]= s1[1].split("[\"i\"][\",\"][\" \"][\"n\"][\",\"][\" \"][\"t\"][\",\"]");   // s2[0] = dichiarazioni s2[1] = simp  Crea s2.length nodi stmt
             //riempi i nodi dichiarazioni e stmt con i contenuti di s1 e s2
             for (String string: s1
                  ) {
-                TreeItem<String> item = new TreeItem<String> (string);
+                TreeItem<String> item = new TreeItem<> (string);
                 rootItem.getChildren().add(item);
+                String s2[]= string.split("[\"i\"][\",\"][\" \"][\"n\"][\",\"][\" \"][\"t\"][\",\"]");   // s2[0] = dichiarazioni s2[1] = simp  Crea s2.length nodi stmt
+                Arrays.stream(s2).map(TreeItem::new).forEach(item2 -> item.getChildren().add(item2));
             }
-            for (String string: s2
-                 ) {
-                TreeItem<String> item = new TreeItem<String> (string);
-                rootItem.getChildren().add(item);
-            }
+
         }
 
 
@@ -103,4 +107,42 @@ public class Gui extends Application {
         root.getChildren().add(tree);
         return root;
     }
+    public String exploreTree(String input){
+        String risultato="";
+        //controlla se sei all'inizio
+        /*
+        * togli la prima parte da input e chiama exploreTree
+        *
+        * return
+        *
+        *
+        *
+        * */
+
+
+
+        //controlla se sei in una dichiarazione
+        /*
+        * togli la prima parte da input e chiama exploreTree
+        *
+        * return
+        *
+        *
+        *
+        * */
+        //controlla se sei in uno statement
+        /*
+        * togli la prima parte da input e chiama exploreTree
+        *
+        * return
+        *
+        *
+        *
+        * */
+        return risultato;
+    }
+
+
+
+
 }
