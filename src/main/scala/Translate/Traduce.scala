@@ -82,12 +82,16 @@ class Traduce extends App {
        if(x.contains("i, n, t")) {risultato=risultato+"$"+">"+"int"+"<";
                                   val ex:Array[String]=x.split("t, ")
                                   val ind=ex(1).indexOf(')')
-                                  //println(ex(1))
+
                                   ind match {
                                     case 1 => risultato=risultato+">"+ex(1).charAt(0)+"<>;<<"
                                     case 4 => risultato=risultato+">"+ex(1).charAt(0)+ex(1).charAt(3)+"<>;<<"
                                     case 7 => risultato=risultato+">"+ex(1).charAt(0)+ex(1).charAt(3)+ex(1).charAt(6)+"<>;<<"
                                     case 10 =>risultato=risultato+">"+ex(1).charAt(0)+ex(1).charAt(3)+ex(1).charAt(6)+ex(1).charAt(9)+"<>;<<"
+                                    case 13 =>risultato=risultato+">"+ex(1).charAt(0)+ex(1).charAt(3)+ex(1).charAt(6)+ex(1).charAt(9)+ex(1).charAt(12)+"<>;<<"
+                                    case 16 =>risultato=risultato+">"+ex(1).charAt(0)+ex(1).charAt(3)+ex(1).charAt(6)+ex(1).charAt(9)+ex(1).charAt(12)+ex(1).charAt(15)+"<>;<<"
+                                    case 19 =>risultato=risultato+">"+ex(1).charAt(0)+ex(1).charAt(3)+ex(1).charAt(6)+ex(1).charAt(9)+ex(1).charAt(12)+ex(1).charAt(15)+ex(1).charAt(18)+"<>;<<"
+
                                   }
                                   val stri:Array[String]=ex(1).split("~=\\)~\\(")
                                   val ind2=stri(1).indexOf(')')
