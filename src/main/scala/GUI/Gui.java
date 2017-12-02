@@ -72,10 +72,8 @@ public class Gui extends Application {
     public StackPane drawTree(String input){
         /*VBox layout = new VBox(30);
         layout.setPadding(new Insets(20,20,20,20));*/
-        String s[]=input.split("!"); //s[0] = "!" Crea il nodo root
         String m=input.substring(1);
-        input=s[1];
-        System.out.println("\\\\\\\\\\ " + s[0] + " ! " + s[1]);
+        System.out.println("\\\\\\\\\\ ");
         System.out.println("m "+m);
         TreeItem<String> rootItem = new TreeItem<> ("Program");
         rootItem.setExpanded(true);
@@ -95,7 +93,7 @@ public class Gui extends Application {
         }
 */
         //Mi serve una funzione ricorsiva che esplori l'albero
-        exploreTree(input,rootItem);
+        exploreTree(m,rootItem,true);
         TreeView<String> tree = new TreeView<> (rootItem);
         StackPane root = new StackPane();
         root.getChildren().add(tree);
@@ -103,11 +101,11 @@ public class Gui extends Application {
     }
 
 
-    public void exploreTree(String input, TreeItem<String> treeItem){
+    public void exploreTree(String input, TreeItem<String> treeItem, boolean isRoot){
 
        switch (treeItem.getValue()){
 
-           case "program":{
+           case "Program":{
 
                //Può essere dichiarazione o stmt
                String txt="";
@@ -122,12 +120,15 @@ public class Gui extends Application {
                TreeItem<String> item = new TreeItem<>(txt);
                treeItem.getChildren().add(item);
                input=input.substring(1);
-               exploreTree(input,item);
-
+               System.out.println("Sono in program e ho fatto " + input);
+               System.out.println(input+" "+item.getValue());
+               exploreTree(input,item,false);
+               break;
            }
            
            case "Statement":{
                 //Può essere simp o ;
+
                String txt="";
                if(input.startsWith(";")) {
                    txt=";";
@@ -136,9 +137,9 @@ public class Gui extends Application {
                }
                TreeItem<String> item = new TreeItem<>(txt);
                treeItem.getChildren().add(item);
-               input=input.substring(1);
-               exploreTree(input,item);
+               input.split(">");
 
+              break;
 
 
            }
@@ -146,23 +147,51 @@ public class Gui extends Application {
            case "simp":{
                 //ident asop binop
 
+               break;
 
            }
            
            case "Dichiarazione":{
                 //int ident
+               String txt=input.substring(input.indexOf(">") + 1, input.indexOf("<"));
+               TreeItem<String> item = new TreeItem<>(txt);
+               treeItem.getChildren().add(item);
+               int startIndex=input.indexOf(txt);
+               String input2= input.substring(startIndex+txt.length()+1);
+               System.out.println(txt+" "+input2);
 
 
+               String txt2=input2.substring(input2.indexOf(">") + 1, input2.indexOf("<"));
+               TreeItem<String> item2 = new TreeItem<>(txt2);
+               treeItem.getChildren().add(item2);
+               int startIndex2=input2.indexOf(txt2);
+               String input3= input2.substring(startIndex2+txt2.length()+1);
+
+
+               String txt3=input3.substring(input3.indexOf(">") + 1, input3.indexOf("<"));
+               TreeItem<String> item3 = new TreeItem<>(txt3);
+               treeItem.getChildren().add(item3);
+               int startIndex3=input3.indexOf(txt3);
+               input= input3.substring(startIndex3+txt3.length()+2);
+
+               System.out.println("Sono in dichiarazione e ho fatto " + input);
+               break;
            }
-           
+
+
+
+
+
            case "exp":{
                 //exp + term
 
+               break;
 
            }
            
            case "term":{
                //term * factor
+               break;
 
 
 
@@ -171,13 +200,15 @@ public class Gui extends Application {
            case "factor":{
                 //intconst o ident o exp
 
+               break;
 
            }
            
         //Vedo chi è il padre per scrivere il nome del nodo
 
        }
-
+    if (input.length()>0&&isRoot)
+    exploreTree(input, treeItem,true);
 /*
         if(input.contains(">")){
             //Creo nodo con la parte di input fino a >
