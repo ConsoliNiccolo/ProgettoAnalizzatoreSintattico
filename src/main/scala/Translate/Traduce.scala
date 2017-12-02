@@ -26,7 +26,7 @@ class Traduce extends App {
     var risultato: String="!"
     for (x <- some_split) {
       if(x.contains("i, n, t")) {risultato=risultato+"$"+">"+"int"+"<";
-        val ex:Array[String]=x.split("i, n, t, ")
+        val ex:Array[String]=x.split("\\(i, n, t, ")
         val ind=ex(1).indexOf(')')
         risultato=risultato+">"+onLookingForID(ind,ex(1))+"<>;<<"
         val stri:Array[String]=ex(1).split("~=\\)~\\(")
