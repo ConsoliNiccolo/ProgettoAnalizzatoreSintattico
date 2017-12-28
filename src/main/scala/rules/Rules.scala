@@ -12,7 +12,18 @@ class Rules extends JavaTokenParsers{
 
   def dichiarazione: Parser[Any]="int "~identificatore~";"
 
-  def exp: Parser[Any]="("~exp~")" | /*exp~binop~exp |*/ intconst /*|   exp~binop~exp*/ | identificatore | exp~binop~exp //causa uno stack overflow
+  //def exp: Parser[Any]="("~exp~")" | /*exp~binop~exp |*/ intconst /*|   exp~binop~exp*/ | identificatore | exp~binop~exp //causa uno stack overflow
+
+  lazy val exp: Parser[Any] =
+    term ~ rep("[+-]".r ~ term)
+
+  lazy val term: Parser[Any] =
+    factor ~ rep("[*/]".r ~ factor)
+
+  lazy val factor: Parser[Any] =
+    "(" ~> exp <~ ")" | floatingPointNumber | value~binop~value | identificatore
+
+  def value: Parser[Any]=identificatore | factor
 
   def identificatore: Parser[Any]=rep("[A-Za-z ]".r)
 

@@ -21,7 +21,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.11.0:jar" level="project" />
-    <orderEntry type="library" name="scala-parser-combinators-2.11.0-m4" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.11.0:jar" level="project" />
+    <orderEntry type="library" name="scala-sdk-2.11.0" level="application" />
+    <orderEntry type="library" name="scala-parser-combinators-2.11.0-m41" level="project" />
   </component>
 </module>

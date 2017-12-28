@@ -1,19 +1,13 @@
 package main
 
 
-import rules.Rules
+import rules._
 import Translate.Traduce
 
-object ParseProgram extends Rules{
+object ParseProgram extends Rules {
 
   def main(args:Array[String]): Unit = {
-
-    //Inserire il traduttore.
-
   }
-
-
-
 
     def parse(input :String): String ={
       println("input:"+input)
@@ -21,11 +15,12 @@ object ParseProgram extends Rules{
       // var stringa=translate.onTranslate2(parseAll(program,input).toString)
       // println(stringa)
       var res=translate.Trasl(parseAll(program,input).toString)
+      res=parseAll(program,input).toString
       return res
       //gui.printGUI(parseAll(program,args(0)).toString)
-    // println(parseAll(program,input))
-    // return parseAll(program,input)
-    //gui.printGUI(parseAll(program,args(0)).toString)
+     // println(parseAll(program,input))
+     // return parseAll(program,input)
+     //gui.printGUI(parseAll(program,args(0)).toString)
 
   }
 
