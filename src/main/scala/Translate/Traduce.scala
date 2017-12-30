@@ -19,9 +19,14 @@ class Traduce extends App {
       }
       case _ => {
         val patRowCol=raw"([0-9]\.[0-9]{1,})".r
+        var found=input.slice(14,35)
         val all=patRowCol.findAllIn(input)
+        var errore=""
+        for(x<-all) {
+          errore=errore+x
+        }
         return "-------------------------------------------------------"+"\n"+
-               "Errore in posizione: "+"\nTipologia errore: "+
+               "Riga/Posizione errore: "+errore+"\nTipologia errore: "+found+
                " found"+"\n-------------------------------------------------------"
       }
     }
@@ -121,3 +126,4 @@ class Traduce extends App {
   }
 
 }
+
