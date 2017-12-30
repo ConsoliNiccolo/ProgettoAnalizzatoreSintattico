@@ -18,10 +18,10 @@ class Traduce extends App {
         return res
       }
       case _ => {
-        var error_split: Array[String]=input.split("failure:")
-        var error2_split: Array[String]=error_split(1).split("found")
+        val patRowCol=raw"([0-9]\.[0-9]{1,})".r
+        val all=patRowCol.findAllIn(input)
         return "-------------------------------------------------------"+"\n"+
-               "Errore in posizione: "+error_split(0)+"\nTipologia errore: "+error2_split(0)+
+               "Errore in posizione: "+"\nTipologia errore: "+
                " found"+"\n-------------------------------------------------------"
       }
     }
@@ -69,6 +69,25 @@ class Traduce extends App {
                               }
                             risultato=risultato+"<<"
                           }
+                          else {
+                            //Assegnazione singola.
+                            val st:Array[String]=stri(1).split("List\\(\\)")
+                            for(x<-st){
+                              val mypat=raw"([0-9]+)|(([a-z][,][ ]){1,}[a-zA-Z][)])|([(][a-zA-Z][)])".r
+                              val all=mypat.findAllIn(x)
+                              for(x<-all){
+                              //Pulizia e risultato=risultato..
+                              val ns=x.replace(",","")
+                              val ns2=ns
+                              val ns3=ns2.replace(" ","")
+                              val ns4=ns3.replace(")","")
+                              val ns5=ns4.replace("(","")
+                              risultato=risultato+"<>"+ns5}
+                            }
+
+                          }
+
+
                   }
             }
 
@@ -77,8 +96,6 @@ class Traduce extends App {
 
     return risultato
   }
-
-
 
   def onLookingForID(index: Int,str: String,b: Boolean): String = {
     var res: String=""
@@ -104,4 +121,3 @@ class Traduce extends App {
   }
 
 }
-
