@@ -51,6 +51,9 @@ public class Gui extends Application {
         window.show();
 
         button.setOnAction((ActionEvent event) -> {
+
+            //Inserire funzione che elimina i commenti
+
             String result = (ParseProgram.parse(textArea.getText())).toString();
 
             //Metodo che disegna l'albero
@@ -64,59 +67,147 @@ public class Gui extends Application {
         button2.setOnAction((ActionEvent event) -> {
             window.setScene(scene);
         });
-
-
     }
 
 
     public StackPane drawTree(String input){
-        /*VBox layout = new VBox(30);
-        layout.setPadding(new Insets(20,20,20,20));*/
-
-
+        String m=input.substring(1);
+        System.out.println("\\\\\\\\\\ ");
+        System.out.println("m "+m);
+        System.out.println(input);
         TreeItem<String> rootItem = new TreeItem<> ("Program");
         rootItem.setExpanded(true);
-
-
-        {
-         //   String s[]=input.split("!"); //s[0] = "!" Crea il nodo root
-            String s1[]= input.split("[\"$&!\"]");   //s1[0] = "$" Crea s1.length nodi dichiarazioni
-         //   String s2[]= s1[1].split("[\"i\"][\",\"][\" \"][\"n\"][\",\"][\" \"][\"t\"][\",\"]");   // s2[0] = dichiarazioni s2[1] = simp  Crea s2.length nodi stmt
-            //riempi i nodi dichiarazioni e stmt con i contenuti di s1 e s2
-            for (String string: s1
-                 ) {
-                exploreTree(string,rootItem);
-            //    TreeItem<String> item = new TreeItem<> (string);
-            //    rootItem.getChildren().add(item);
-            //    String s2[]= string.split(">");   // s2[0] = dichiarazioni s2[1] = simp  Crea s2.length nodi stmt
-            //    Arrays.stream(s2).map(TreeItem::new).forEach(item2 -> item.getChildren().add(item2));
-            }
-
-        }
-
-        //Mi serve una funzione ricorsiva che esplori l'albero
-
+        //Funzione ricorsiva che esplori l'albero
+         exploreTree(m,rootItem,true);
         TreeView<String> tree = new TreeView<> (rootItem);
         StackPane root = new StackPane();
         root.getChildren().add(tree);
         return root;
     }
-    public void exploreTree(String input, TreeItem<String> treeItem){
-/*
-       switch (treeItem.getValue()){
 
-        //Vedo chi è il padre per scrivere il nome del nodo
 
-       }
-     */
+    public void exploreTree(String input, TreeItem<String> treeItem, boolean isRoot){
+
+        switch (treeItem.getValue()){
+
+            case "Program":{
+                //Può essere dichiarazione o stmt
+                String txt="£";
+                if(input.startsWith("$")) {
+                    txt="Dichiarazione";
+                }
+                if(input.startsWith("&")) {
+                    txt="Statement";
+                }
+                if(txt.equals("£")){
+                    System.out.println("Sono in program e ho fatto " + input);
+                    if(input.length()>0) {
+                        input = input.substring(1);
+                       // exploreTree(input, treeItem, false);
+                    }
+                }else {
+                    TreeItem<String> item = new TreeItem<>(txt);
+                    treeItem.getChildren().add(item);
+                    input = input.substring(1);
+                    System.out.println("Sono in program e ho fatto " + input);
+                    System.out.println(input + " " + item.getValue());
+                    exploreTree(input, item, false);
+                }
+                break;
+            }
+
+            case "Statement":{
+                //Può essere simp o ;
+                String txt="";
+                if(input.startsWith(";")) {
+                    txt=";";
+                }else{
+                    txt=input;
+                }
+                TreeItem<String> item = new TreeItem<>(txt);
+                treeItem.getChildren().add(item);
+                String pippo[]=input.split(">");
+                for (String aPippo : pippo) {
+                    System.out.println(aPippo);
+                }
+                break;
+            }
+
+            case "simp":{
+                //ident asop binop
+                System.out.println("Simp");
+                break;
+            }
+            case "Dichiarazione":{
+                //int ident
+                String txt=input.substring(input.indexOf(">") + 6, input.indexOf(";"));
+                txt=txt.substring(0, txt.indexOf("<"));
+                txt="int "+txt+" ;";
+                TreeItem<String> item = new TreeItem<>(txt);
+                treeItem.getChildren().add(item);
+                int startIndex=input.indexOf(txt);
+                input= input.substring(startIndex+txt.length()+1);
+                System.out.println(txt+" "+input);
+
+               /*   INT A;         QUESTO CODICE ERA PER INT A=0;
+               String input2= input.substring(startIndex+txt.length()+1);
+               System.out.println(txt+" "+input2);
+
+               String txt2=input2.substring(input2.indexOf(">") + 1, input2.indexOf("<"));
+               TreeItem<String> item2 = new TreeItem<>(txt2);
+               treeItem.getChildren().add(item2);
+               int startIndex2=input2.indexOf(txt2);
+               String input3= input2.substring(startIndex2+txt2.length()+1);
+
+               String txt3=input3.substring(input3.indexOf(">") + 1, input3.indexOf("<"));
+               TreeItem<String> item3 = new TreeItem<>(txt3);
+               treeItem.getChildren().add(item3);
+               int startIndex3=input3.indexOf(txt3);
+               input= input3.substring(startIndex3+txt3.length()+2);
+               */
+                System.out.println("Sono in dichiarazione e ho fatto " + input);
+                break;
+            }
+
+
+
+
+
+            case "exp":{
+                //exp + term
+
+                break;
+
+            }
+
+            case "term":{
+                //term * factor
+                break;
+
+
+
+            }
+
+            case "factor":{
+                //intconst o ident o exp
+
+                break;
+
+            }
+
+            //Vedo chi è il padre per scrivere il nome del nodo
+
+        }
+        if (input.length()>0&&isRoot)
+            exploreTree(input, treeItem,true);
 /*
         if(input.contains(">")){
-            //Creo nodo padre con la parte di input fino a >
-            //La aggiungo a treeItem
+            //Creo nodo con la parte di input fino a >
+            //La aggiungo al padre
             //Chiamo ricorsivamente exploreTree
         }else{
             //Creo foglia
-            //La aggiungo a treeItem
+            //La aggiungo al padre
         }
 */
     }
