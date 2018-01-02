@@ -120,22 +120,40 @@ public class Gui extends Application {
                 //Può essere simp o ;
                 String txt="";
                 if(input.startsWith(";")) {
-                    txt=";";
-                }else{
-                    txt=input;
-                }
-                TreeItem<String> item = new TreeItem<>(txt);
-                treeItem.getChildren().add(item);
-                String pippo[]=input.split(">");
-                for (String aPippo : pippo) {
-                    System.out.println(aPippo);
+                    TreeItem<String> item = new TreeItem<>(";");
+                    treeItem.getChildren().add(item);
+                    break;
+                }else {
+                    txt = "Simp";
+
+                    TreeItem<String> item = new TreeItem<>(txt);
+                    treeItem.getChildren().add(item);
+
+                    String pippo[] = input.split(">");
+                    for (String aPippo : pippo) {
+                        System.out.println("Pippo " + aPippo);
+                    }
+                    exploreTree(input, item, false);
                 }
                 break;
             }
 
-            case "simp":{
+            case "Simp":{
                 //ident asop binop
-                System.out.println("Simp");
+                TreeItem<String> item = new TreeItem<>("Ident");
+                treeItem.getChildren().add(item);
+                            String txt=input.substring(1,input.indexOf("<"));
+                            TreeItem<String> id = new TreeItem<>(txt);
+                            item.getChildren().add(id);
+
+                TreeItem<String> item2 = new TreeItem<>("Asop");
+                treeItem.getChildren().add(item2);
+                    TreeItem<String> itemChild = new TreeItem<>("=");
+                    item2.getChildren().add(itemChild);
+                TreeItem<String> item3 = new TreeItem<>("Exp");
+                treeItem.getChildren().add(item3);
+                exploreTree(input,item3,false);
+
                 break;
             }
             case "Dichiarazione":{
@@ -173,9 +191,10 @@ public class Gui extends Application {
 
 
 
-            case "exp":{
+            case "Exp":{
                 //exp + term
-
+                TreeItem<String> item = new TreeItem<>(input);
+                treeItem.getChildren().add(item);
                 break;
 
             }
@@ -183,16 +202,12 @@ public class Gui extends Application {
             case "term":{
                 //term * factor
                 break;
-
-
-
             }
 
             case "factor":{
                 //intconst o ident o exp
 
                 break;
-
             }
 
             //Vedo chi è il padre per scrivere il nome del nodo
