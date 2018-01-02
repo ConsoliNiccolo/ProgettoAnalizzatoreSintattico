@@ -15,9 +15,9 @@ class Traduce() extends App {
     var checking_ok=input.contains("parsed")
     checking_ok match{
       case true => {
-          var str=input.slice(15,input.length)
-          val res:String=startToConvert(str)
-          return res
+        var str=input.slice(15,input.length)
+        val res:String=startToConvert(str)
+        return res
       }
       case _ => {
         val patRowCol=raw"([0-9]\.[0-9]{1,})".r
@@ -28,8 +28,8 @@ class Traduce() extends App {
           errore=errore+x
         }
         return "-------------------------------------------------------"+"\n"+
-               "Riga/Posizione errore: "+errore+"\nTipologia errore: "+found+
-               " found"+"\n-------------------------------------------------------"
+          "Riga/Posizione errore: "+errore+"\nTipologia errore: "+found+
+          " found"+"\n-------------------------------------------------------"
       }
     }
 
@@ -40,65 +40,65 @@ class Traduce() extends App {
     var some_split: Array[String]=input.split("Some")
     var risultato: String="!"
     for (x <- some_split) {
-        if(x.contains("int")) {check=true}//Dichiarazione}
-        else if(!x.contains("int")) {check=false}//Assegnazione}
-            check match {
-                  case true => {
-                      val strings:Array[String]=x.split("~List")
-                      for(x <-strings) {
-                        //Controllo semantico
-                        var check_semant=onSearchingSemanticErrorsINT(x)
-                        if(check_semant!="OK") return "-------------------------------------------------------"+"\n"+
-                          "Errore: "+check_semant+"\n-------------------------------------------------------"
-                        if(x.contains("))~;)")) {
-                        //Vera stringa di dichiarazione
-                        val ind=x.indexOf(')')
-                        risultato=risultato+"$"+">"+"int"+"<"+">"+onLookingForID(ind,x,check)+"<>;<<"
-                      }
-                    }
-                  }
-                  //Assegnazione
-                  case false => {
-                        var check_semant_ass=onSearchingSemanticErrorsASS(x)
-                        if(check_semant_ass!="OK") return "-------------------------------------------------------"+"\n"+
-                          "Errore: "+check_semant_ass+"\n-------------------------------------------------------"
-                        val ind=x.indexOf(')')
-                        //Identificatore Memorizzato.
-                        risultato=risultato+"&"+">"+onLookingForID(ind,x,check)+"<>="
-                        //Ricerca valori
-                        val stri:Array[String]=x.split("~=\\)~\\(")
-                          if(stri(1).contains("+") || stri(1).contains("*")){
-                              val st:Array[String]=stri(1).split("List\\(\\)")
-                              for(x<-st) {
-                                //Matcha sia numeri che 1ID che multiID
-                                val mypat=raw"([0-9]+)|(([a-z][,][ ]){1,}[a-zA-Z][)])|([(][a-zA-Z][)])|([+])|([*])".r
-                                val all=mypat.findAllIn(x)
-                                for(x <- all) {
-                                  //Pulizia e risultato=risultato..
-                                    var ns5=cleanString(x,cleanBuff)
-                                    risultato=risultato+"<>"+ns5}
-                              }
-                            risultato=risultato+"<<"
-                          }
-                          else {
-                            //Assegnazione singola.
-                            val st:Array[String]=stri(1).split("List\\(\\)")
-                            for(x<-st){
-                              val mypat=raw"([0-9]+)|(([a-z][,][ ]){1,}[a-zA-Z][)])|([(][a-zA-Z][)])".r
-                              val all=mypat.findAllIn(x)
-                              for(x<-all){
-                              //Pulizia e risultato=risultato..
-                              var ns5=cleanString(x,cleanBuff)
-                              risultato=risultato+"<>"+ns5}
-                            }
-
-                          }
-
-
-                  }
+      if(x.contains("int")) {check=true}//Dichiarazione}
+      else if(!x.contains("int")) {check=false}//Assegnazione}
+      check match {
+        case true => {
+          val strings:Array[String]=x.split("~List")
+          for(x <-strings) {
+            //Controllo semantico
+            var check_semant=onSearchingSemanticErrorsINT(x)
+            if(check_semant!="OK") return "-------------------------------------------------------"+"\n"+
+              "Errore: "+check_semant+"\n-------------------------------------------------------"
+            if(x.contains("))~;)")) {
+              //Vera stringa di dichiarazione
+              val ind=x.indexOf(')')
+              risultato=risultato+"$"+">"+"int"+"<"+">"+onLookingForID(ind,x,check)+"<>;<<"
             }
+          }
+        }
+        //Assegnazione
+        case false => {
+          var check_semant_ass=onSearchingSemanticErrorsASS(x)
+          if(check_semant_ass!="OK") return "-------------------------------------------------------"+"\n"+
+            "Errore: "+check_semant_ass+"\n-------------------------------------------------------"
+          val ind=x.indexOf(')')
+          //Identificatore Memorizzato.
+          risultato=risultato+"&"+">"+onLookingForID(ind,x,check)+"<>="
+          //Ricerca valori
+          val stri:Array[String]=x.split("~=\\)~\\(")
+          if(stri(1).contains("+") || stri(1).contains("*")){
+            val st:Array[String]=stri(1).split("List\\(\\)")
+            for(x<-st) {
+              //Matcha sia numeri che 1ID che multiID
+              val mypat=raw"([0-9]+)|(([a-z][,][ ]){1,}[a-zA-Z][)])|([(][a-zA-Z][)])|([+])|([*])".r
+              val all=mypat.findAllIn(x)
+              for(x <- all) {
+                //Pulizia e risultato=risultato..
+                var ns5=cleanString(x,cleanBuff)
+                risultato=risultato+"<>"+ns5}
+            }
+            risultato=risultato+"<<"
+          }
+          else {
+            //Assegnazione singola.
+            val st:Array[String]=stri(1).split("List\\(\\)")
+            for(x<-st){
+              val mypat=raw"([0-9]+)|(([a-z][,][ ]){1,}[a-zA-Z][)])|([(][a-zA-Z][)])".r
+              val all=mypat.findAllIn(x)
+              for(x<-all){
+                //Pulizia e risultato=risultato..
+                var ns5=cleanString(x,cleanBuff)
+                risultato=risultato+"<>"+ns5}
+            }
+            risultato=risultato+"<<"
+          }
 
-        if(x.contains("None~;")) {risultato=risultato+"&>;<<"}
+
+        }
+      }
+
+      if(x.contains("None~;")) {risultato=risultato+"&>;<<"}
     }
 
     return risultato
@@ -115,16 +115,6 @@ class Traduce() extends App {
     }
     return res;
 
-  }
-
-  def onLookingForValue(index: Int,str:String): String ={
-    var res: String=""
-    var count: Int=1;
-    while(count!=index) {
-      res=res+str.charAt(count)
-      count=count+1
-    }
-    return res;
   }
 
   def onSearchingSemanticErrorsINT(s:String):String={
