@@ -3,19 +3,27 @@ package Translate
 import java.util.regex.Pattern
 import scala.collection.mutable.ListBuffer
 
-class Traduce extends App {
-  var check:Boolean=false;
+class Traduce() extends App {
+  var check:Boolean=false
+  var myBuffer = List[String]()
+
 
   def Trasl(input: String): String = {
     println(input)
+    //Controllo generale
     var checking_ok=input.contains("parsed")
     checking_ok match{
       case true => {
-        println("Parsed eseguito correttemente,operazione di traduzione in corso:")
-        var str=input.slice(15,input.length)
-        val res:String=startToConvert(str)
-        println(res)
-        return res
+        //Controllo semantico
+        var check_semant=onSearchingSemanticErrors(input)
+        if(check_semant!="OK")
+          return "-------------------------------------------------------"+"\n"+
+          "Errore: "+check_semant+"\n-------------------------------------------------------"
+        else {
+          var str=input.slice(15,input.length)
+          val res:String=startToConvert(str)
+          println(res)
+          return res}
       }
       case _ => {
         val patRowCol=raw"([0-9]\.[0-9]{1,})".r
@@ -125,5 +133,30 @@ class Traduce extends App {
     return res;
   }
 
-}
+  def onSearchingSemanticErrors(s:String):String={
+    var myBuffer = List[String]()
+    val pat=raw"(([a-z][,][ ]){1,}[a-zA-Z][)][)])|([(][a-zA-Z][)][)])".r
+    val str=pat.findAllIn(s)
+    for(x<-str) {
+      val ns=x.replaceFirst("\\)","")
+      if (!myBuffer.contains(ns) || myBuffer.isEmpty) {
+        myBuffer = ns :: myBuffer
+      }
+      else {
+        return "Molteplice dichiarazione delle stessa variabile ->"+ns;
+      }
+    }
+    val pat2=raw"(([a-z][,][ ]){1,}[a-zA-Z][)][~][=])|([(][a-zA-Z][)][~][=])".r
+    val str2=pat2.findAllIn(s)
+    for(x<-str2) {
+      val ns=x.replace("~","")
+      val ns2=ns
+      val ns3=ns2.replace("=","")
+      if(!myBuffer.contains(ns3)) {
+        return "Valore non dichiarato ->"+ns3
+      }
+    }
+    return "OK"
+  }
 
+}
