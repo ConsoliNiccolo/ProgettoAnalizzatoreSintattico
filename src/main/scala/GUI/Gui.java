@@ -158,15 +158,16 @@ public class Gui extends Application {
 
             case "Dichiarazione":{
                 //int ident ;
-
-                //Fare la gerarchia?
-
-
                 String txt=input.substring(input.indexOf(">") + 6, input.indexOf(";"));
                 txt=txt.substring(0, txt.indexOf("<"));
-                txt="int "+txt+" ;";
-                TreeItem<String> item = new TreeItem<>(txt);
+                TreeItem<String> item = new TreeItem<>("int");
                 treeItem.getChildren().add(item);
+                TreeItem<String> item2 = new TreeItem<>("Identificatore");
+                treeItem.getChildren().add(item2);
+                TreeItem<String> itemChild = new TreeItem<>(txt);
+                item2.getChildren().add(itemChild);
+                TreeItem<String> item3 = new TreeItem<>(";");
+                treeItem.getChildren().add(item3);
                 int startIndex=input.indexOf(txt);
                 input= input.substring(startIndex+txt.length()+1);
               //  System.out.println(txt+" "+input);
