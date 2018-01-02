@@ -6,24 +6,18 @@ import scala.collection.mutable.ListBuffer
 class Traduce() extends App {
   var check:Boolean=false
   var myBuffer = List[String]()
-
+  var cleanBuff=List[String]()
 
   def Trasl(input: String): String = {
+    cleanBuff= List(" ", ",", "(", "=","~",")")
     println(input)
     //Controllo generale
     var checking_ok=input.contains("parsed")
     checking_ok match{
       case true => {
-        //Controllo semantico
-        var check_semant=onSearchingSemanticErrors(input)
-        if(check_semant!="OK")
-          return "-------------------------------------------------------"+"\n"+
-          "Errore: "+check_semant+"\n-------------------------------------------------------"
-        else {
           var str=input.slice(15,input.length)
           val res:String=startToConvert(str)
-          println(res)
-          return res}
+          return res
       }
       case _ => {
         val patRowCol=raw"([0-9]\.[0-9]{1,})".r
@@ -42,6 +36,7 @@ class Traduce() extends App {
   }
 
   def startToConvert(input: String): String = {
+    myBuffer = List[String]()
     var some_split: Array[String]=input.split("Some")
     var risultato: String="!"
     for (x <- some_split) {
@@ -51,7 +46,11 @@ class Traduce() extends App {
                   case true => {
                       val strings:Array[String]=x.split("~List")
                       for(x <-strings) {
-                      if(x.contains("))~;)")) {
+                        //Controllo semantico
+                        var check_semant=onSearchingSemanticErrorsINT(x)
+                        if(check_semant!="OK") return "-------------------------------------------------------"+"\n"+
+                          "Errore: "+check_semant+"\n-------------------------------------------------------"
+                        if(x.contains("))~;)")) {
                         //Vera stringa di dichiarazione
                         val ind=x.indexOf(')')
                         risultato=risultato+"$"+">"+"int"+"<"+">"+onLookingForID(ind,x,check)+"<>;<<"
@@ -60,6 +59,9 @@ class Traduce() extends App {
                   }
                   //Assegnazione
                   case false => {
+                        var check_semant_ass=onSearchingSemanticErrorsASS(x)
+                        if(check_semant_ass!="OK") return "-------------------------------------------------------"+"\n"+
+                          "Errore: "+check_semant_ass+"\n-------------------------------------------------------"
                         val ind=x.indexOf(')')
                         //Identificatore Memorizzato.
                         risultato=risultato+"&"+">"+onLookingForID(ind,x,check)+"<>="
@@ -73,11 +75,7 @@ class Traduce() extends App {
                                 val all=mypat.findAllIn(x)
                                 for(x <- all) {
                                   //Pulizia e risultato=risultato..
-                                    val ns=x.replace(",","")
-                                    val ns2=ns
-                                    val ns3=ns2.replace(" ","")
-                                    val ns4=ns3.replace(")","")
-                                    val ns5=ns4.replace("(","")
+                                    var ns5=cleanString(x,cleanBuff)
                                     risultato=risultato+"<>"+ns5}
                               }
                             risultato=risultato+"<<"
@@ -90,11 +88,7 @@ class Traduce() extends App {
                               val all=mypat.findAllIn(x)
                               for(x<-all){
                               //Pulizia e risultato=risultato..
-                              val ns=x.replace(",","")
-                              val ns2=ns
-                              val ns3=ns2.replace(" ","")
-                              val ns4=ns3.replace(")","")
-                              val ns5=ns4.replace("(","")
+                              var ns5=cleanString(x,cleanBuff)
                               risultato=risultato+"<>"+ns5}
                             }
 
@@ -133,8 +127,7 @@ class Traduce() extends App {
     return res;
   }
 
-  def onSearchingSemanticErrors(s:String):String={
-    var myBuffer = List[String]()
+  def onSearchingSemanticErrorsINT(s:String):String={
     val pat=raw"(([a-z][,][ ]){1,}[a-zA-Z][)][)])|([(][a-zA-Z][)][)])".r
     val str=pat.findAllIn(s)
     for(x<-str) {
@@ -143,20 +136,31 @@ class Traduce() extends App {
         myBuffer = ns :: myBuffer
       }
       else {
-        return "Molteplice dichiarazione delle stessa variabile ->"+ns;
-      }
-    }
-    val pat2=raw"(([a-z][,][ ]){1,}[a-zA-Z][)][~][=])|([(][a-zA-Z][)][~][=])".r
-    val str2=pat2.findAllIn(s)
-    for(x<-str2) {
-      val ns=x.replace("~","")
-      val ns2=ns
-      val ns3=ns2.replace("=","")
-      if(!myBuffer.contains(ns3)) {
-        return "Valore non dichiarato ->"+ns3
+        return "Molteplice dichiarazione delle stessa variabile ->"+cleanString(ns,cleanBuff);
       }
     }
     return "OK"
+  }
+
+  def onSearchingSemanticErrorsASS(str: String): String ={
+    val pat2=raw"(([a-z][,][ ]){1,}[a-zA-Z][)][~][=])|([(][a-zA-Z][)][~][=])".r
+    val str2=pat2.findAllIn(str)
+    for(x<-str2) {
+      var ns3=cleanString(x,cleanBuff.slice(3,5))
+      if(!myBuffer.contains(ns3)) {
+        return "Identificatore non dichiarato ->"+cleanString(ns3,cleanBuff)
+      }
+
+    }
+    return "OK"
+  }
+
+  def cleanString(main_str:String,arr:List[String]):String= {
+    if(arr.isEmpty) return main_str;
+    else {
+      var s=main_str.replace(arr.head,"")
+      cleanString(s,arr.slice(1,arr.length))
+    }
   }
 
 }
