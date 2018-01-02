@@ -60,7 +60,7 @@ public class Gui extends Application {
             StackPane layout5=drawTree(result);
 
             layout5.getChildren().add(button2);
-            Scene scene3 = new Scene(layout5,650,400);
+            Scene scene3 = new Scene(layout5,350,500);
             window.setScene(scene3);
         });
 
@@ -77,7 +77,7 @@ public class Gui extends Application {
         System.out.println(input);
         TreeItem<String> rootItem = new TreeItem<> ("Program");
         rootItem.setExpanded(true);
-        //Funzione ricorsiva che esplori l'albero
+        //Funzione ricorsiva che esplora l'albero
          exploreTree(m,rootItem,true);
         TreeView<String> tree = new TreeView<> (rootItem);
         StackPane root = new StackPane();
@@ -118,13 +118,7 @@ public class Gui extends Application {
 
             case "Statement":{
                 //Può essere simp o ;
-                String txt="";
-                if(input.startsWith(";")) {
-                    TreeItem<String> item = new TreeItem<>(";");
-                    treeItem.getChildren().add(item);
-                    break;
-                }else {
-                    txt = "Simp";
+                String txt="Simp";
 
                     TreeItem<String> item = new TreeItem<>(txt);
                     treeItem.getChildren().add(item);
@@ -134,7 +128,9 @@ public class Gui extends Application {
                         System.out.println("Pippo " + aPippo);
                     }
                     exploreTree(input, item, false);
-                }
+                    TreeItem<String> itemq = new TreeItem<>(";");
+                    treeItem.getChildren().add(itemq);
+
                 break;
             }
 
@@ -156,8 +152,13 @@ public class Gui extends Application {
 
                 break;
             }
+
             case "Dichiarazione":{
-                //int ident
+                //int ident ;
+
+                //Fare la gerarchia?
+
+
                 String txt=input.substring(input.indexOf(">") + 6, input.indexOf(";"));
                 txt=txt.substring(0, txt.indexOf("<"));
                 txt="int "+txt+" ;";
@@ -187,16 +188,22 @@ public class Gui extends Application {
                 break;
             }
 
-
-
-
-
             case "Exp":{
                 //exp + term
-                TreeItem<String> item = new TreeItem<>(input);
+                String txt;
+                if(input.contains("&")) {
+                     txt = input.substring(input.indexOf("="), input.indexOf("&"));
+
+                }else {
+                    txt=input.substring(input.indexOf("="), input.length());
+
+                }
+                //Pulire TXT
+
+
+                TreeItem<String> item = new TreeItem<>(txt);
                 treeItem.getChildren().add(item);
                 break;
-
             }
 
             case "term":{
