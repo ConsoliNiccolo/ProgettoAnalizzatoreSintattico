@@ -45,7 +45,8 @@ public class Gui extends Application {
         layout3.getChildren().addAll(layout2,layout);
         layout4.getChildren().addAll(button2,risultato);
         Scene scene = new Scene(layout3,355,250);
-        Scene scene2 = new Scene(layout4,500,300);
+
+        Alert alert =new Alert(Alert.AlertType.ERROR,"Errore:");
 
         window.setScene(scene);
         window.show();
@@ -59,6 +60,9 @@ public class Gui extends Application {
             //Metodo che disegna l'albero
             StackPane layout5=drawTree(result);
 
+            if(layout5==(null)){
+                return;
+            }
             layout5.getChildren().add(button2);
             Scene scene3 = new Scene(layout5,350,500);
             window.setScene(scene3);
@@ -71,18 +75,21 @@ public class Gui extends Application {
 
 
     public StackPane drawTree(String input){
-        String m=input.substring(1);
-        System.out.println("\\\\\\\\\\ ");
-        System.out.println("m "+m);
-        System.out.println(input);
-        TreeItem<String> rootItem = new TreeItem<> ("Program");
-        rootItem.setExpanded(true);
-        //Funzione ricorsiva che esplora l'albero
-         exploreTree(m,rootItem,true);
-        TreeView<String> tree = new TreeView<> (rootItem);
-        StackPane root = new StackPane();
-        root.getChildren().add(tree);
-        return root;
+        if(input.substring(0,1).equals("-")){
+            infoBox(input,"Errore","Errore: indicati riga e carattere nel formato \"riga.carattere\"");
+            return null;
+        }
+        else {
+            String m = input.substring(1);
+            TreeItem<String> rootItem = new TreeItem<>("Program");
+            rootItem.setExpanded(true);
+            //Funzione ricorsiva che esplora l'albero
+            exploreTree(m, rootItem, true);
+            TreeView<String> tree = new TreeView<>(rootItem);
+            StackPane root = new StackPane();
+            root.getChildren().add(tree);
+            return root;
+        }
     }
 
 
@@ -100,7 +107,7 @@ public class Gui extends Application {
                     txt="Statement";
                 }
                 if(txt.equals("£")){
-                    System.out.println("Sono in program e ho fatto " + input);
+                 //   System.out.println("Sono in program e ho fatto " + input);
                     if(input.length()>0) {
                         input = input.substring(1);
                        // exploreTree(input, treeItem, false);
@@ -109,8 +116,8 @@ public class Gui extends Application {
                     TreeItem<String> item = new TreeItem<>(txt);
                     treeItem.getChildren().add(item);
                     input = input.substring(1);
-                    System.out.println("Sono in program e ho fatto " + input);
-                    System.out.println(input + " " + item.getValue());
+                 //   System.out.println("Sono in program e ho fatto " + input);
+                 //   System.out.println(input + " " + item.getValue());
                     exploreTree(input, item, false);
                 }
                 break;
@@ -123,10 +130,6 @@ public class Gui extends Application {
                     TreeItem<String> item = new TreeItem<>(txt);
                     treeItem.getChildren().add(item);
 
-                    String pippo[] = input.split(">");
-                    for (String aPippo : pippo) {
-                        System.out.println("Pippo " + aPippo);
-                    }
                     exploreTree(input, item, false);
                     TreeItem<String> itemq = new TreeItem<>(";");
                     treeItem.getChildren().add(itemq);
@@ -166,7 +169,7 @@ public class Gui extends Application {
                 treeItem.getChildren().add(item);
                 int startIndex=input.indexOf(txt);
                 input= input.substring(startIndex+txt.length()+1);
-                System.out.println(txt+" "+input);
+              //  System.out.println(txt+" "+input);
 
                /*   INT A;         QUESTO CODICE ERA PER INT A=0;
                String input2= input.substring(startIndex+txt.length()+1);
@@ -184,7 +187,7 @@ public class Gui extends Application {
                int startIndex3=input3.indexOf(txt3);
                input= input3.substring(startIndex3+txt3.length()+2);
                */
-                System.out.println("Sono in dichiarazione e ho fatto " + input);
+             //   System.out.println("Sono in dichiarazione e ho fatto " + input);
                 break;
             }
 
@@ -200,6 +203,8 @@ public class Gui extends Application {
                 }
                 //Pulire TXT
 
+                txt=txt.replace("<"," ");
+                txt=txt.replace(">"," ");
 
                 TreeItem<String> item = new TreeItem<>(txt);
                 treeItem.getChildren().add(item);
@@ -232,6 +237,15 @@ public class Gui extends Application {
             //La aggiungo al padre
         }
 */
+    }
+
+    public static void infoBox(String infoMessage, String titleBar, String headerMessage)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titleBar);
+        alert.setHeaderText(headerMessage);
+        alert.setContentText(infoMessage);
+        alert.showAndWait();
     }
 
 }
