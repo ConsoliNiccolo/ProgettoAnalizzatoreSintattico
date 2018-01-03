@@ -76,7 +76,7 @@ public class Gui extends Application {
 
     public StackPane drawTree(String input){
         if(input.substring(0,1).equals("-")){
-            infoBox(input,"Errore","Errore: indicati riga e carattere nel formato \"riga.carattere\"");
+            infoBox(input,"Errore","Errore: indicati riga e carattere nel formato \"riga.carattere\" nel caso di errore sintattico");
             return null;
         }
         else {
@@ -172,22 +172,6 @@ public class Gui extends Application {
                 input= input.substring(startIndex+txt.length()+1);
               //  System.out.println(txt+" "+input);
 
-               /*   INT A;         QUESTO CODICE ERA PER INT A=0;
-               String input2= input.substring(startIndex+txt.length()+1);
-               System.out.println(txt+" "+input2);
-
-               String txt2=input2.substring(input2.indexOf(">") + 1, input2.indexOf("<"));
-               TreeItem<String> item2 = new TreeItem<>(txt2);
-               treeItem.getChildren().add(item2);
-               int startIndex2=input2.indexOf(txt2);
-               String input3= input2.substring(startIndex2+txt2.length()+1);
-
-               String txt3=input3.substring(input3.indexOf(">") + 1, input3.indexOf("<"));
-               TreeItem<String> item3 = new TreeItem<>(txt3);
-               treeItem.getChildren().add(item3);
-               int startIndex3=input3.indexOf(txt3);
-               input= input3.substring(startIndex3+txt3.length()+2);
-               */
              //   System.out.println("Sono in dichiarazione e ho fatto " + input);
                 break;
             }
@@ -196,14 +180,13 @@ public class Gui extends Application {
                 //exp + term
                 String txt;
                 if(input.contains("&")) {
-                     txt = input.substring(input.indexOf("="), input.indexOf("&"));
+                     txt = input.substring(input.indexOf("=")+1, input.indexOf("&"));
 
                 }else {
-                    txt=input.substring(input.indexOf("="), input.length());
+                    txt=input.substring(input.indexOf("=")+1, input.length());
 
                 }
                 //Pulire TXT
-
                 txt=txt.replace("<"," ");
                 txt=txt.replace(">"," ");
 
@@ -228,16 +211,6 @@ public class Gui extends Application {
         }
         if (input.length()>0&&isRoot)
             exploreTree(input, treeItem,true);
-/*
-        if(input.contains(">")){
-            //Creo nodo con la parte di input fino a >
-            //La aggiungo al padre
-            //Chiamo ricorsivamente exploreTree
-        }else{
-            //Creo foglia
-            //La aggiungo al padre
-        }
-*/
     }
 
     public static void infoBox(String infoMessage, String titleBar, String headerMessage)
