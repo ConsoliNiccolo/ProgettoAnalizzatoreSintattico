@@ -13,6 +13,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.ParseProgram;
+import java.util.regex.Pattern;
+
 
 import java.util.Arrays;
 
@@ -54,8 +56,9 @@ public class Gui extends Application {
         button.setOnAction((ActionEvent event) -> {
 
             //Inserire funzione che elimina i commenti
+            String cleanOutOfComm=manageComments(textArea.getText());
 
-            String result = (ParseProgram.parse(textArea.getText())).toString();
+            String result = (ParseProgram.parse(cleanOutOfComm));
 
             //Metodo che disegna l'albero
             StackPane layout5=drawTree(result);
@@ -107,17 +110,17 @@ public class Gui extends Application {
                     txt="Statement";
                 }
                 if(txt.equals("£")){
-                 //   System.out.println("Sono in program e ho fatto " + input);
+                    //   System.out.println("Sono in program e ho fatto " + input);
                     if(input.length()>0) {
                         input = input.substring(1);
-                       // exploreTree(input, treeItem, false);
+                        // exploreTree(input, treeItem, false);
                     }
                 }else {
                     TreeItem<String> item = new TreeItem<>(txt);
                     treeItem.getChildren().add(item);
                     input = input.substring(1);
-                 //   System.out.println("Sono in program e ho fatto " + input);
-                 //   System.out.println(input + " " + item.getValue());
+                    //   System.out.println("Sono in program e ho fatto " + input);
+                    //   System.out.println(input + " " + item.getValue());
                     exploreTree(input, item, false);
                 }
                 break;
@@ -127,12 +130,12 @@ public class Gui extends Application {
                 //Può essere simp o ;
                 String txt="Simp";
 
-                    TreeItem<String> item = new TreeItem<>(txt);
-                    treeItem.getChildren().add(item);
+                TreeItem<String> item = new TreeItem<>(txt);
+                treeItem.getChildren().add(item);
 
-                    exploreTree(input, item, false);
-                    TreeItem<String> itemq = new TreeItem<>(";");
-                    treeItem.getChildren().add(itemq);
+                exploreTree(input, item, false);
+                TreeItem<String> itemq = new TreeItem<>(";");
+                treeItem.getChildren().add(itemq);
 
                 break;
             }
@@ -141,14 +144,14 @@ public class Gui extends Application {
                 //ident asop binop
                 TreeItem<String> item = new TreeItem<>("Ident");
                 treeItem.getChildren().add(item);
-                            String txt=input.substring(1,input.indexOf("<"));
-                            TreeItem<String> id = new TreeItem<>(txt);
-                            item.getChildren().add(id);
+                String txt=input.substring(1,input.indexOf("<"));
+                TreeItem<String> id = new TreeItem<>(txt);
+                item.getChildren().add(id);
 
                 TreeItem<String> item2 = new TreeItem<>("Asop");
                 treeItem.getChildren().add(item2);
-                    TreeItem<String> itemChild = new TreeItem<>("=");
-                    item2.getChildren().add(itemChild);
+                TreeItem<String> itemChild = new TreeItem<>("=");
+                item2.getChildren().add(itemChild);
                 TreeItem<String> item3 = new TreeItem<>("Exp");
                 treeItem.getChildren().add(item3);
                 exploreTree(input,item3,false);
@@ -170,9 +173,9 @@ public class Gui extends Application {
                 treeItem.getChildren().add(item3);
                 int startIndex=input.indexOf(txt);
                 input= input.substring(startIndex+txt.length()+1);
-              //  System.out.println(txt+" "+input);
+                //  System.out.println(txt+" "+input);
 
-             //   System.out.println("Sono in dichiarazione e ho fatto " + input);
+                //   System.out.println("Sono in dichiarazione e ho fatto " + input);
                 break;
             }
 
@@ -180,7 +183,7 @@ public class Gui extends Application {
                 //exp + term
                 String txt;
                 if(input.contains("&")) {
-                     txt = input.substring(input.indexOf("=")+1, input.indexOf("&"));
+                    txt = input.substring(input.indexOf("=")+1, input.indexOf("&"));
 
                 }else {
                     txt=input.substring(input.indexOf("=")+1, input.length());
@@ -220,6 +223,14 @@ public class Gui extends Application {
         alert.setHeaderText(headerMessage);
         alert.setContentText(infoMessage);
         alert.showAndWait();
+    }
+
+    public static String manageComments(String str) {
+        String cleanOutOfComments="";
+        str=str.replaceAll("([/][/].*)","");
+        str=str.replaceAll("(([/][*]).*[\\n].*([*][/]))|(([/][*]).*[*][/])","");
+        cleanOutOfComments=str;
+        return cleanOutOfComments;
     }
 
 }
