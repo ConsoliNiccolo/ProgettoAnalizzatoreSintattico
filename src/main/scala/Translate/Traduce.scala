@@ -123,7 +123,7 @@ class Traduce() extends App {
   }
 
   def onSearchingSemanticErrorsINT(s:String):String={
-    val pat=raw"(([a-z][,][ ]){1,}[a-zA-Z][)][)])|([(][a-zA-Z][)][)])".r
+    val pat=raw"(([a-zA-Z][,][ ]){1,}[a-zA-Z][)][)])|([(][a-zA-Z][)][)])".r
     val str=pat.findAllIn(s)
     for(x<-str) {
       val ns=cleanString(x,cleanBuff)
@@ -139,7 +139,7 @@ class Traduce() extends App {
 
 
   def onSearchingSemanticErrorsASS(str: String): String ={
-    val pat3=raw"([(][a-z][)])|([(][a-z]([,][ ][a-z])*[)])".r
+    val pat3=raw"([(][a-zA-Z][)])|([(][a-zA-Z]([,][ ][a-zA-Z])*[)])".r
     val str2=pat3.findAllIn(str)
     for(x<-str2) {
       var ns3=cleanString(x,cleanBuff)
