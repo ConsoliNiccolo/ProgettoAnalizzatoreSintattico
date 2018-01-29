@@ -9,7 +9,12 @@ class Traduce() extends App {
   var cleanBuff=List[String]()
 
   def Trasl(input: String): String = {
-    cleanBuff= List(" ", ",", "(", "=","~",")")
+    cleanBuff= List(" ",
+                    ",",
+                    "(",
+                    "=",
+                    "~",
+                    ")")
     println(input)
     //Controllo generale
     var checking_ok=input.contains("parsed")
@@ -121,7 +126,7 @@ class Traduce() extends App {
     val pat=raw"(([a-z][,][ ]){1,}[a-zA-Z][)][)])|([(][a-zA-Z][)][)])".r
     val str=pat.findAllIn(s)
     for(x<-str) {
-      val ns=x.replaceFirst("\\)","")
+      val ns=cleanString(x,cleanBuff)
       if (!myBuffer.contains(ns) || myBuffer.isEmpty) {
         myBuffer = ns :: myBuffer
       }
@@ -129,14 +134,15 @@ class Traduce() extends App {
         return "Molteplice dichiarazione delle stessa variabile ->"+cleanString(ns,cleanBuff);
       }
     }
-    return "OK"
+    return "OK";
   }
 
+
   def onSearchingSemanticErrorsASS(str: String): String ={
-    val pat2=raw"(([a-z][,][ ]){1,}[a-zA-Z][)][~][=])|([(][a-zA-Z][)][~][=])".r
-    val str2=pat2.findAllIn(str)
+    val pat3=raw"([(][a-z][)])|([(][a-z]([,][ ][a-z])*[)])".r
+    val str2=pat3.findAllIn(str)
     for(x<-str2) {
-      var ns3=cleanString(x,cleanBuff.slice(3,5))
+      var ns3=cleanString(x,cleanBuff)
       if(!myBuffer.contains(ns3)) {
         return "Identificatore non dichiarato ->"+cleanString(ns3,cleanBuff)
       }
